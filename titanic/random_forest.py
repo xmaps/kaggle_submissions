@@ -33,7 +33,13 @@ predictors = ["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked"]
 # min_samples_split is the minimum number of rows we need to make a split
 # min_samples_leaf is the minimum number of samples we can have at the place where a tree branch ends
 # (the bottom points of the tree)
-alg = RandomForestClassifier(random_state=1, n_estimators=10, min_samples_split=2, min_samples_leaf=1)
+#
+# The first (and easiest) thing we can do to improve the accuracy of the random forest is to increase the number of
+# trees we're using. Training more trees will take more time, but because we're averaging many predictions we made on
+# different subsets of the data, having more trees will greatly increase accuracy (up to a point).
+# We can also tweak the min_samples_split and min_samples_leaf variables to reduce overfitting.
+
+alg = RandomForestClassifier(random_state=1, n_estimators=50, min_samples_split=4, min_samples_leaf=2)
 
 kf = KFold(titanic.shape[0], n_folds=3, random_state=1)
 
