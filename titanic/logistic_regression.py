@@ -1,43 +1,15 @@
-# Import Numpy
-import numpy as np
-# Import Pandas
 import pandas as pd
-# Import the linear regression class
 from sklearn.linear_model import LogisticRegression
 from sklearn import cross_validation
+
+from feature_preparation import prepare_features
 
 # We can use the pandas library in Python to read in the CSV file
 # This creates a pandas dataframe and assigns it to the titanic variable
 titanic = pd.read_csv("train.csv")
 
-# Print the first five rows of the dataframe
-print(titanic.head(5))
-
-print(titanic.describe())
-
-# The titanic variable is available here
-titanic["Age"] = titanic["Age"].fillna(titanic["Age"].median())
-
-# Find all of the unique genders
-# The column appears to contain the values male and female only
-print(titanic["Sex"].unique())
-
-# Replace all the occurences of male with the number 0
-titanic.loc[titanic["Sex"] == "male", "Sex"] = 0
-
-# Replace all the occurences of female with the number 1
-titanic.loc[titanic["Sex"] == "female", "Sex"] = 1
-
-# Find all of the unique values for "Embarked"
-print(titanic["Embarked"].unique())
-
-# The most common embarkation port is S, so let's assume everyone who's missing an embarkation port got on there.
-titanic["Embarked"] = titanic["Embarked"].fillna("S")
-
-# We'll assign the code 0 to S, 1 to C, and 2 to Q.
-titanic.loc[titanic["Embarked"] == "S", "Embarked"] = 0
-titanic.loc[titanic["Embarked"] == "C", "Embarked"] = 1
-titanic.loc[titanic["Embarked"] == "Q", "Embarked"] = 2
+# prepare all the necessary features
+titanic = prepare_features(titanic)
 
 # The columns we'll use to predict the target
 predictors = ["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked"]
