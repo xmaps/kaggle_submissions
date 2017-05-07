@@ -1,11 +1,12 @@
 import re
 import operator
 
+family_id_mapping = {}
+
 
 def get_family_id(row):
     """A function to get the ID for a particular row"""
     # A dictionary mapping family name to ID
-    family_id_mapping = {}
     # Find the last name by splitting on a comma
     last_name = row["Name"].split(",")[0]
     # Create the family ID
@@ -57,6 +58,8 @@ def prepare_features(titanic_info):
     titanic_info.loc[titanic_info["Embarked"] == "C", "Embarked"] = 1
     titanic_info.loc[titanic_info["Embarked"] == "Q", "Embarked"] = 2
 
+    titanic_info["Fare"] = titanic_info["Fare"].fillna(titanic_info["Fare"].median())
+
     # We can also generate new features. Here are some ideas:
     # * The length of the name. This could pertain to how rich the person was, therefore their position on the Titanic.
     # * The total number of people in a family (SibSp + Parch).
@@ -73,7 +76,8 @@ def prepare_features(titanic_info):
     # Map each title to an integer
     # Some titles are very rare, so they're compressed into the same codes as other titles
     title_mapping = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Dr": 5, "Rev": 6, "Major": 7, "Col": 7, "Mlle": 8,
-                     "Mme": 8, "Don": 9, "Lady": 10, "Countess": 10, "Jonkheer": 10, "Sir": 9, "Capt": 7, "Ms": 2}
+                     "Mme": 8, "Dona": 9, "Don": 9, "Lady": 10, "Countess": 10, "Jonkheer": 10, "Sir": 9,
+                     "Capt": 7, "Ms": 2}
     for k, v in title_mapping.items():
         titles[titles == k] = v
 
